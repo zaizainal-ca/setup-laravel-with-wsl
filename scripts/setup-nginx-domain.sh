@@ -55,6 +55,16 @@ EOF
 
 echo "Created Nginx configuration at $NGINX_CONF"
 
+# Fix directory traversal permissions for Nginx
+echo "Granting Nginx traversal access to the project path..."
+# Walk up the directory path from PROJECT_PATH to /home
+# and grant execute (x) permissions to others (o) so Nginx can traverse
+CURRENT_PATH="$PROJECT_PATH"
+while [[ "$CURRENT_PATH" != "/" && "$CURRENT_PATH" != "/home" && "$CURRENT_PATH" != "." ]]; do
+    chmod o+x "$CURRENT_PATH" 2>/dev/null
+    CURRENT_PATH=$(dirname "$CURRENT_PATH")
+done
+
 # Enable the site
 ln -s "$NGINX_CONF" "/etc/nginx/sites-enabled/"
 
