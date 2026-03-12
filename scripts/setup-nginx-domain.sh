@@ -65,6 +65,16 @@ while [[ "$CURRENT_PATH" != "/" && "$CURRENT_PATH" != "/home" && "$CURRENT_PATH"
     CURRENT_PATH=$(dirname "$CURRENT_PATH")
 done
 
+# Check if it's a Laravel project and fix storage/cache permissions
+LARAVEL_ROOT=$(dirname "$PROJECT_PATH")
+if [ -f "$LARAVEL_ROOT/artisan" ] && [ -d "$LARAVEL_ROOT/storage" ] && [ -d "$LARAVEL_ROOT/bootstrap/cache" ]; then
+    echo "Laravel project detected. Setting up storage and cache permissions..."
+    chown -R $SUDO_USER:www-data "$LARAVEL_ROOT/storage" "$LARAVEL_ROOT/bootstrap/cache" 2>/dev/null
+    chmod -R 775 "$LARAVEL_ROOT/storage" "$LARAVEL_ROOT/bootstrap/cache" 2>/dev/null
+fi
+# sudo chown -R $USER:www-data /home/zainurin/projects/ar-module/storage /home/zainurin/projects/ar-module/bootstrap/cache
+# sudo chmod -R 775 /home/zainurin/projects/ar-module/storage /home/zainurin/projects/ar-module/bootstrap/cache
+
 # Enable the site
 ln -s "$NGINX_CONF" "/etc/nginx/sites-enabled/"
 
