@@ -72,3 +72,21 @@ C:\Windows\System32\drivers\etc\hosts
 Add:
 
 127.0.0.1 project.test
+
+---
+
+# Automation Script
+
+An automation script has been provided to simplify the nginx setup process (steps 2-4).
+
+1. Make the script executable:
+```bash
+chmod +x scripts/setup-nginx-domain.sh
+```
+
+2. Run the script with your domain and project public path:
+```bash
+sudo ./scripts/setup-nginx-domain.sh project.test /home/username/projects/project/public
+```
+
+*Note: You still need to manually add the Hosts Entry in Windows.*
